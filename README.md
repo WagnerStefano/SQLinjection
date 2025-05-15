@@ -56,4 +56,7 @@ aqui vemos que foram encontradas as informações de usuários
 
 # Dump
 Seguindo a linha de testes, todas as informações de Dump também podem ser obtidas de maneira manual já que vimos onde o navegadores responde aos comandos SQL
-    e potemos fazer esta tentativa da seguinte maneira
+    e podemos fazer esta tentativa da seguinte maneira, buscando pelo Information Schema que são sessões padrões dos bancos SQL criadas automaticamente e que podem servir de trampolim para que possamos nos aprofundar em mais informações.
+    utilizando o caminho 
+    
+            testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,schema_name,3,4,5,6,7,8,9,10,11 from information_schema.schemata
